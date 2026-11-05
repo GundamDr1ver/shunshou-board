@@ -1,0 +1,27 @@
+#!/bin/zsh
+set -euo pipefail
+cd "${0:A:h:h}"
+mkdir -p build/module-cache
+board_stage="$(mktemp -d /private/tmp/SimpleBoard.XXXXXX)"
+trap 'rm -rf "$board_stage"' EXIT
+board_app="$board_stage/顺手画板.app"
+mkdir -p "$board_app/Contents/MacOS"
+board_arch="$(uname -m)"
+board_version="$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' Resources/Info.plist)"
+xcrun swiftc -swift-version 5 -O -target "$board_arch-apple-macos14.0" -module-cache-path build/module-cache -module-name Board Sources/Board/*.swift -o "$board_app/Contents/MacOS/SimpleBoard"
+cp Resources/Info.plist "$board_app/Contents/Info.plist"
+mkdir -p "$board_app/Contents/Resources"
+cp Resources/Icons/AppIcon.icns "$board_app/Contents/Resources/AppIcon.icns"
+board_extension="$board_app/Contents/PlugIns/Preview.appex"
+mkdir -p "$board_extension/Contents/MacOS"
+xcrun swiftc -swift-version 5 -O -target "$board_arch-apple-macos14.0" -module-cache-path build/module-cache -application-extension -parse-as-library -module-name BoardPreview -Xlinker -e -Xlinker _NSExtensionMain Sources/BoardQuickLook/ProjectPreview.swift Sources/BoardQuickLook/PreviewProvider.swift -o "$board_extension/Contents/MacOS/Preview"
+cp Resources/QuickLook/Preview.plist "$board_extension/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString $board_version" "$board_extension/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Set CFBundleVersion $(/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' Resources/Info.plist)" "$board_extension/Contents/Info.plist"
+codesign --force --sign - --entitlements Resources/QuickLook/Entitlements.plist "$board_extension"
+codesign --force --sign - "$board_app"
+codesign --verify --deep --strict "$board_app"
+ditto --norsrc "$board_app" "build/顺手画板-$board_version.app"
+cp LICENSE "$board_stage/LICENSE"
+ditto --norsrc -c -k "$board_stage" "build/顺手画板-$board_version-$board_arch.zip"
+print "应用与已校验 ZIP 已生成：build/顺手画板-$board_version-$board_arch.zip"

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>CFBundleExecutable</key><string>SimpleBoard</string>
+<key>CFBundleIdentifier</key><string>com.vinasky.simpleboard</string>
+<key>CFBundleName</key><string>顺手画板</string>
+<key>CFBundleDisplayName</key><string>顺手画板</string>
+<key>CFBundleIconFile</key><string>AppIcon.icns</string>
+<key>CFBundlePackageType</key><string>APPL</string>
+<key>CFBundleShortVersionString</key><string>0.1.6</string>
+<key>CFBundleVersion</key><string>7</string>
+<key>LSMinimumSystemVersion</key><string>14.0</string>
+<key>NSHighResolutionCapable</key><true/>
+<key>NSPrincipalClass</key><string>NSApplication</string>
+<key>CFBundleDocumentTypes</key><array><dict>
+<key>CFBundleTypeName</key><string>顺手画板工程</string>
+<key>CFBundleTypeIconFile</key><string>AppIcon.icns</string>
+<key>CFBundleTypeRole</key><string>Editor</string>
+<key>LSHandlerRank</key><string>Owner</string>
+<key>LSItemContentTypes</key><array><string>com.vinasky.simpleboard.project</string></array>
+<key>LSTypeIsPackage</key><true/>
+</dict></array>
+<key>UTExportedTypeDeclarations</key><array><dict>
+<key>UTTypeIdentifier</key><string>com.vinasky.simpleboard.project</string>
+<key>UTTypeIconFile</key><string>AppIcon.icns</string>
+<key>UTTypeDescription</key><string>顺手画板工程</string>
+<key>UTTypeConformsTo</key><array><string>com.apple.package</string></array>
+<key>UTTypeTagSpecification</key><dict><key>public.filename-extension</key><array><string>sboard</string></array></dict>
+</dict></array>
+</dict></plist>
